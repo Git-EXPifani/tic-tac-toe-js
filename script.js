@@ -9,7 +9,13 @@ const GameBoard = (function () {
     return true;
   };
 
-  return { setMark, getBoard };
+  const resetBoard = () => {
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] !== " ") board[i] = " ";
+    }
+  };
+
+  return { setMark, getBoard, resetBoard };
 })();
 
 const displayBoard = () => {
@@ -24,3 +30,45 @@ const displayBoard = () => {
       ____________
     `);
 };
+
+function Player(name, marker) {
+  const playerName = name;
+  const playerMarker = marker;
+
+  const getName = () => playerName;
+  const getMarker = () => playerMarker;
+
+  return { getName, getMarker };
+}
+
+const p1 = Player("Abdul", "X");
+const p2 = Player("Hamza", "O");
+
+const gameController = (function () {
+  let currentPlayer = p2;
+
+  let nextTurn = () => {
+    currentPlayer = currentPlayer === p1 ? p2 : p1;
+    console.log(`${currentPlayer.getName()}'s turn`);
+  };
+
+  let getCurrentName = () => {
+    console.log(
+      `${currentPlayer.getName()} is the name of the current player. `,
+    );
+  };
+
+  const board = GameBoard.getBoard();
+
+  let checkGame = () => {
+    //Win Condition 1
+    if (
+      board[0] == currentPlayer.getMarker() &&
+      board[1] == currentPlayer.getMarker() &&
+      board[2] == currentPlayer.getMarker()
+    ) {
+      console.log(`${currentPlayer.getName()} is the winner.`);
+    }
+  };
+  return { nextTurn, getCurrentName, checkGame };
+})();
